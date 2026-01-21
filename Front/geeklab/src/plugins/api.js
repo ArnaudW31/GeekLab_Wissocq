@@ -1,5 +1,11 @@
 import axios from 'axios'
 
-export const api = axios.create({
-  baseURL: 'http://localhost:8080/api/'
+const api = axios.create({
+  baseURL: "http://localhost:8080/api/"
 })
+
+const externalApi = axios.create({
+  baseURL: "https://pokeapi.co/api/v2/"
+})
+
+export {api, externalApi}

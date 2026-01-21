@@ -1,11 +1,34 @@
-<script setup></script>
+<script setup>
+  import PokeAppBar from './components/PokeAppBar.vue';
+</script>
 
 <template>
-  <h1>You did it!</h1>
-  <p>
-    Visit <a href="https://vuejs.org/" target="_blank" rel="noopener">vuejs.org</a> to read the
-    documentation
-  </p>
+  <v-app>
+    <poke-app-bar></poke-app-bar>
+    <div style="height: 30px;"></div>
+    <router-view />
+  </v-app>
 </template>
 
-<style scoped></style>
+<script>
+  import { usePokeStore } from '@/stores/pokeStore'
+  import { mapActions, mapState } from 'pinia';
+
+  export default {
+    name : "App",
+    data() {
+      return {
+      }
+    },
+    computed: {
+      ...mapState(usePokeStore, ["getUserToken"])
+    },
+    watch : {
+      getUserToken(newVal, oldVal) {
+        this.$router.push('/')
+      }
+    }
+  }
+</script>
+
+<style></style>
