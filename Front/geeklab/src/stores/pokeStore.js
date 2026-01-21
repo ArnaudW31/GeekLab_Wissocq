@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { api, externalApi } from '@/plugins/api'
+import { api } from '@/plugins/api'
 
 import { toast } from 'vue3-toastify';
 import 'vue3-toastify/dist/index.css';
@@ -80,7 +80,7 @@ export const usePokeStore = defineStore('poke', {
     async updateTeamList(){
       try {
         this.loading = true
-        const res = await api.get("teams?page=${this.pageIndex}&size=${pageSize}")
+        const res = await api.get("/teams?page=${this.pageIndex}&size=${pageSize}")
         console.log(res.data)
         this.shownTeams = res.data;
 
@@ -96,7 +96,7 @@ export const usePokeStore = defineStore('poke', {
     async createTeam(teamData){
       try {
         this.loading = true
-        const res = await api.post("teams", teamData)
+        const res = await api.post("/teams", teamData)
         console.log(res.data)
 
       } catch (err) {
@@ -111,7 +111,7 @@ export const usePokeStore = defineStore('poke', {
     async getFullPokemonList(){
       try {
         this.loading = true
-        const res = await externalApi.get("pokemon?offset=0&limit=1024")
+        const res = await api.get("/poke/pokemon")
 
         console.log(res.data)
         return res.data.results;
@@ -128,7 +128,24 @@ export const usePokeStore = defineStore('poke', {
     async getPokeInfo(name){
       try {
         this.loading = true
-        const res = await externalApi.get("pokemon/" + name)
+        const res = await api.get("/poke/pokemon/" + name)
+
+        console.log(res.data)
+        return res.data;
+
+      } catch (err) {
+        console.error(err.response?.status)
+        console.error(err.response?.data)
+      }
+      finally {
+        this.loading = false
+      }
+    },
+
+    async getItemList(){
+      try {
+        this.loading = true
+        const res = await api.get("/poke/items")
 
         console.log(res.data)
         return res.data;

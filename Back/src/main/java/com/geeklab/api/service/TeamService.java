@@ -60,23 +60,9 @@ public class TeamService {
 
             List<Pokemon> pokemons = pokemonRepository.getPokemonFromTeam(team.getId());
 
-            if (pokemons.size() > 0){
-                newTeam.pokemon1 = Optional.of(new PokemonDTO(pokemons.get(0)));
-                if (pokemons.size() > 1){
-                    newTeam.pokemon2 = Optional.of(new PokemonDTO(pokemons.get(1)));
-                    if (pokemons.size() > 2){
-                        newTeam.pokemon3 = Optional.of(new PokemonDTO(pokemons.get(2)));
-                        if (pokemons.size() > 3){
-                            newTeam.pokemon4 = Optional.of(new PokemonDTO(pokemons.get(3)));
-                            if (pokemons.size() > 4){
-                                newTeam.pokemon5 = Optional.of(new PokemonDTO(pokemons.get(4)));
-                                if (pokemons.size() > 5){
-                                    newTeam.pokemon6 = Optional.of(new PokemonDTO(pokemons.get(5)));
-                                }
-                            }
-                        }
-                    }
-                }
+            newTeam.pokemons = new ArrayList<PokemonDTO>();
+            for (Pokemon pkmn : pokemons) {
+                newTeam.pokemons.add(new PokemonDTO(pkmn));
             }
         }
         return teams;
@@ -91,43 +77,9 @@ public class TeamService {
         team.setName(dto.name);
         team.setCreator(creator);
         team.setCreateDate(Date.from(Instant.now()));
-        
-        PokemonDTO poke;
-        Pokemon newPoke;
 
-        if (dto.pokemon1.isPresent()){
-            poke = dto.pokemon1.get();
-            newPoke = new Pokemon(new PokemonSlot(team.getId(), 1), team, poke.pokeId, poke.name, poke.abilityId, poke.itemId, poke.move1Id, poke.move2Id, poke.move3Id, poke.move4Id, poke.isShiny);
-            this.pokemonRepository.save(newPoke);
-        }
-
-        if (dto.pokemon2.isPresent()){
-            poke = dto.pokemon2.get();
-            newPoke = new Pokemon(new PokemonSlot(team.getId(), 2), team, poke.pokeId, poke.name, poke.abilityId, poke.itemId, poke.move1Id, poke.move2Id, poke.move3Id, poke.move4Id, poke.isShiny);
-            this.pokemonRepository.save(newPoke);
-        }
-
-        if (dto.pokemon3.isPresent()){
-            poke = dto.pokemon3.get();
-            newPoke = new Pokemon(new PokemonSlot(team.getId(), 3), team, poke.pokeId, poke.name, poke.abilityId, poke.itemId, poke.move1Id, poke.move2Id, poke.move3Id, poke.move4Id, poke.isShiny);
-            this.pokemonRepository.save(newPoke);
-        }
-
-        if (dto.pokemon4.isPresent()){
-            poke = dto.pokemon4.get();
-            newPoke = new Pokemon(new PokemonSlot(team.getId(), 4), team, poke.pokeId, poke.name, poke.abilityId, poke.itemId, poke.move1Id, poke.move2Id, poke.move3Id, poke.move4Id, poke.isShiny);
-            this.pokemonRepository.save(newPoke);
-        }
-
-        if (dto.pokemon5.isPresent()){
-            poke = dto.pokemon5.get();
-            newPoke = new Pokemon(new PokemonSlot(team.getId(), 5), team, poke.pokeId, poke.name, poke.abilityId, poke.itemId, poke.move1Id, poke.move2Id, poke.move3Id, poke.move4Id, poke.isShiny);
-            this.pokemonRepository.save(newPoke);
-        }
-
-        if (dto.pokemon6.isPresent()){
-            poke = dto.pokemon6.get();
-            newPoke = new Pokemon(new PokemonSlot(team.getId(), 6), team, poke.pokeId, poke.name, poke.abilityId, poke.itemId, poke.move1Id, poke.move2Id, poke.move3Id, poke.move4Id, poke.isShiny);
+        for (PokemonDTO poke : dto.pokemons) {
+            Pokemon newPoke = new Pokemon(new PokemonSlot(team.getId(), 1), team, poke.pokeId, poke.name, poke.abilityId, poke.itemId, poke.move1Id, poke.move2Id, poke.move3Id, poke.move4Id, poke.isShiny);
             this.pokemonRepository.save(newPoke);
         }
 

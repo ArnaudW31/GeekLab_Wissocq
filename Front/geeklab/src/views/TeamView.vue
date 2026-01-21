@@ -1,12 +1,13 @@
 <template>
   <v-container class="pa-4">
-    <v-autocomplete
-      v-model="selectedPokemon"
-      :items="pokemonListFull"
-      item-title="name"
-      label="Choisir un Pokemon"
-      clearable
-    />
+    
+      <v-autocomplete
+        v-model="selectedPokemon"
+        :items="pokemonListFull"
+        item-title="name"
+        label="Choisir un Pokemon"
+        clearable
+      />
 
     <v-btn
       icon="mdi-plus"
@@ -15,13 +16,31 @@
       @click="addPoke"
     />
 
-    <v-select
-      class="mt-4"
-      v-model="currentPokemon"
-      :items="pokemons"
-      item-title="name"
-      label="Pokemons de l'équipe"
-    />
+    <v-card @click="changeCurrentPoke(pkmn)" v-for="pkmn in pokemons">
+      <h2>{{ pkmn.name }}</h2>
+      <v-img width="150" aspect-ratio="1/1" :src="pkmn.sprites.front_default"></v-img>
+    </v-card>
+
+    <v-container v-if="currentPokemon != null">
+      <v-img width="300" aspect-ratio="1/1" :src="currentPokemon.sprites.front_default"></v-img>
+
+
+      <v-autocomplete
+        v-model="selectedAbility"
+        :items="currentPokemon.abilities"
+        item-title="ability.name"
+        label="Choisir un talent"
+        clearable
+      />
+
+      <v-autocomplete
+        v-model="selectedItem"
+        :items="itemListFull"
+        item-title="name"
+        label="Choisir un objet à tenir"
+        clearable
+      />
+    </v-container>
   </v-container>
 </template>
 <script>
@@ -34,16 +53,19 @@
       return {
         pokemons : [],
         selectedPokemon : [],
-        currentPokemonIndex : 0,
-        currentPokemon : {},
+        currentPokemon : null,
         pokemonListFull : [],
+        itemListFull : [],
+        selectedAbility : null,
+        selectedItem : null,
       }
     },
     computed: {
-      ...mapState(usePokeStore, ["getFullPokemonList", "getPokeInfo"])
+      ...mapState(usePokeStore, ["getFullPokemonList", "getPokeInfo", "getItemList"])
     },
     async mounted(){
       this.pokemonListFull = await this.getFullPokemonList()
+      this.itemListFull = await this.getItemList();
     },
     methods: {
       async addPoke(){
@@ -57,7 +79,10 @@
 
         this.selectedPokemon = null
 
-        this.currentPokemon = this.pokemons[this.pokemons.length]
+        console.log(infosPoke.sprites.front_default)
+      },
+      changeCurrentPoke(pkmn){
+        this.currentPokemon = pkmn
       }
     }
   }

@@ -1,6 +1,7 @@
 package com.geeklab.api.dto;
 
-import java.util.Optional;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.geeklab.api.entity.Team;
 
@@ -8,12 +9,7 @@ public class TeamDTO {
     public String name;
     public String creatorName;
     public Long voteCount;
-    public Optional<PokemonDTO> pokemon1;
-    public Optional<PokemonDTO> pokemon2;
-    public Optional<PokemonDTO> pokemon3;
-    public Optional<PokemonDTO> pokemon4;
-    public Optional<PokemonDTO> pokemon5;
-    public Optional<PokemonDTO> pokemon6;
+    public List<PokemonDTO> pokemons;
 
     public TeamDTO(){
         this.name = "";
@@ -24,6 +20,7 @@ public class TeamDTO {
     public TeamDTO(Team team){
         this.name = team.getName();
         this.creatorName = team.getCreator().getUsername();
+        this.pokemons = new ArrayList<PokemonDTO>();
         this.voteCount = (long)0;
     }
 }
