@@ -5,7 +5,7 @@
         v-model="selectedPokemon"
         :items="pokemonListFull"
         item-title="name"
-        label="Choisir un Pokemon"
+        label="Ajouter un Pokemon"
         clearable
       />
 
@@ -24,6 +24,12 @@
     <v-container v-if="currentPokemon != null">
       <v-img width="300" aspect-ratio="1/1" :src="currentPokemon.sprites.front_default"></v-img>
 
+      <v-autocomplete
+        v-model="selectedPokemon"
+        :items="pokemonListFull"
+        item-title="name"
+        label="Changer de Pokémon"
+      />
 
       <v-autocomplete
         v-model="selectedAbility"
@@ -40,6 +46,35 @@
         label="Choisir un objet à tenir"
         clearable
       />
+
+      <v-autocomplete
+        v-model="selectedMove1"
+        :items="currentPokemonMoveList"
+        item-title="name"
+        label="Capacité 1"
+      />
+
+      <v-autocomplete
+        v-model="selectedMove2"
+        :items="currentPokemonMoveList"
+        item-title="name"
+        label="Capacité 2"
+      />
+
+      <v-autocomplete
+        v-model="selectedMove3"
+        :items="currentPokemonMoveList"
+        item-title="name"
+        label="Capacité 3"
+      />
+
+      <v-autocomplete
+        v-model="selectedMove4"
+        :items="currentPokemonMoveList"
+        item-title="name"
+        label="Capacité 4"
+      />
+      
     </v-container>
   </v-container>
 </template>
@@ -52,12 +87,17 @@
     data() {
       return {
         pokemons : [],
-        selectedPokemon : [],
+        selectedPokemon : null,
         currentPokemon : null,
         pokemonListFull : [],
         itemListFull : [],
+        currentPokemonMoveList : [],
         selectedAbility : null,
         selectedItem : null,
+        selectedMove1 : null,
+        selectedMove2 : null,
+        selectedMove3 : null,
+        selectedMove4 : null,
       }
     },
     computed: {
@@ -78,6 +118,8 @@
         this.pokemons.push(infosPoke)
 
         this.selectedPokemon = null
+
+        this.currentPokemonMoveList = infosPoke.moves.map(m => m.move)
 
         console.log(infosPoke.sprites.front_default)
       },
