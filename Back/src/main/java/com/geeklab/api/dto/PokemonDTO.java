@@ -6,16 +6,16 @@ public class PokemonDTO {
     public int slotNum;
     public int pokeId;
     public String name;
-    public int abilityId;
-    public int itemId;
-    public int move1Id;
-    public int move2Id;
-    public int move3Id;
-    public int move4Id;
+    public String abilityId;
+    public String itemId;
+    public String move1Id;
+    public String move2Id;
+    public String move3Id;
+    public String move4Id;
     public boolean isShiny;
 
-    public PokemonDTO(int slotNum, int pokeId, String name, int abilityId,
-                   int itemId, int move1Id, int move2Id, int move3Id, int move4Id, boolean isShiny) {
+    public PokemonDTO(int slotNum, int pokeId, String name, String abilityId,
+                   String itemId, String move1Id, String move2Id, String move3Id, String move4Id, boolean isShiny) {
         this.slotNum = slotNum;
         this.pokeId = pokeId;
         this.name = name;
@@ -45,12 +45,12 @@ public class PokemonDTO {
         this.slotNum = 0;
         this.pokeId = 0;
         this.name = "";
-        this.abilityId = 0;
-        this.itemId = 0;
-        this.move1Id = 0;
-        this.move2Id = 0;
-        this.move3Id = 0;
-        this.move4Id = 0;
+        this.abilityId = "";
+        this.itemId = "";
+        this.move1Id = "";
+        this.move2Id = "";
+        this.move3Id = "";
+        this.move4Id = "";
         this.isShiny = false;
     }
 }

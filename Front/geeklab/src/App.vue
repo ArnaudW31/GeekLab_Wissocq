@@ -7,6 +7,11 @@
     <poke-app-bar></poke-app-bar>
     <div style="height: 30px;"></div>
     <router-view />
+
+    <v-skeleton-loader
+      v-if="getLoading"
+      type="image"
+    />
   </v-app>
 </template>
 
@@ -21,7 +26,7 @@
       }
     },
     computed: {
-      ...mapState(usePokeStore, ["getUserToken"])
+      ...mapState(usePokeStore, ["getUserToken", "getLoading"])
     },
     watch : {
       getUserToken(newVal, oldVal) {

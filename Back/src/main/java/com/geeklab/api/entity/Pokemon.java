@@ -12,8 +12,8 @@ public class Pokemon {
     private PokemonSlot id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @MapsId("teamId") // correspond au champ teamId dans SlotId
-    @JoinColumn(name = "teamId")
+    @MapsId("teamId") // <-- dit à Hibernate : "prends teamId de id pour remplir la FK"
+    @JoinColumn(name = "team_id")
     private Team team;
 
     @Column(nullable = false)
@@ -23,30 +23,30 @@ public class Pokemon {
     private String name;
 
     @Column(nullable = false)
-    private int abilityId;
+    private String abilityId;
 
     @Column
-    private int itemId;
+    private String itemId;
 
     @Column
-    private int move1Id;
+    private String move1Id;
     
     @Column
-    private int move2Id;
+    private String move2Id;
     
     @Column
-    private int move3Id;
+    private String move3Id;
     
     @Column
-    private int move4Id;
+    private String move4Id;
     
     @Column(nullable = false)
     private boolean isShiny;
 
     public Pokemon() {}
 
-    public Pokemon(PokemonSlot id, Team team, int pokeId, String name, int abilityId,
-                   int itemId, int move1Id, int move2Id, int move3Id, int move4Id, boolean isShiny) {
+    public Pokemon(PokemonSlot id, Team team, int pokeId, String name, String abilityId,
+                   String itemId, String move1Id, String move2Id, String move3Id, String move4Id, boolean isShiny) {
         this.id = id;
         this.team = team;
         this.pokeId = pokeId;
@@ -72,23 +72,23 @@ public class Pokemon {
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
 
-    public int getAbilityId() { return abilityId; }
-    public void setAbilityId(int abilityId) { this.abilityId = abilityId; }
+    public String getAbilityId() { return abilityId; }
+    public void setAbilityId(String abilityId) { this.abilityId = abilityId; }
 
-    public int getItemId() { return itemId; }
-    public void setItemId(int itemId) { this.itemId = itemId; }
+    public String getItemId() { return itemId; }
+    public void setItemId(String itemId) { this.itemId = itemId; }
 
-    public int getMove1Id() { return move1Id; }
-    public void setMove1Id(int move1Id) { this.move1Id = move1Id; }
+    public String getMove1Id() { return move1Id; }
+    public void setMove1Id(String move1Id) { this.move1Id = move1Id; }
 
-    public int getMove2Id() { return move2Id; }
-    public void setMove2Id(int move2Id) { this.move2Id = move2Id; }
+    public String getMove2Id() { return move2Id; }
+    public void setMove2Id(String move2Id) { this.move2Id = move2Id; }
 
-    public int getMove3Id() { return move3Id; }
-    public void setMove3Id(int move3Id) { this.move3Id = move3Id; }
+    public String getMove3Id() { return move3Id; }
+    public void setMove3Id(String move3Id) { this.move3Id = move3Id; }
 
-    public int getMove4Id() { return move4Id; }
-    public void setMove4Id(int move4Id) { this.move4Id = move4Id; }
+    public String getMove4Id() { return move4Id; }
+    public void setMove4Id(String move4Id) { this.move4Id = move4Id; }
 
     public boolean isShiny() { return isShiny; }
     public void setShiny(boolean shiny) { isShiny = shiny; }

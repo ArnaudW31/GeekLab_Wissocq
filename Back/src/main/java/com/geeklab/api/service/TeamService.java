@@ -23,6 +23,8 @@ import com.geeklab.api.repository.TeamRepository;
 import com.geeklab.api.repository.UserRepository;
 import com.geeklab.api.repository.VoteRepository;
 
+import jakarta.transaction.Transactional;
+
 @Service
 public class TeamService {
     
@@ -47,7 +49,7 @@ public class TeamService {
      */
     public ArrayList<TeamDTO> getTeams(int pageNum, int pageSize, Optional<String> creatorName, Optional<String> teamName) {
         Pageable pageable = PageRequest.of(pageNum, pageSize);
-        Page<Team> page = teamRepository.findAll(pageable);
+        Page<Team> page = this.teamRepository.findAll(pageable);
 
         ArrayList<TeamDTO> teams = new ArrayList<TeamDTO>();
 
@@ -56,35 +58,64 @@ public class TeamService {
 
             newTeam.name = team.getName();
             newTeam.creatorName = team.getCreator().getUsername();
-            newTeam.voteCount = voteRepository.countVotesForTeam(team.getId());
+            newTeam.voteCount = this.voteRepository.countVotesForTeam(team.getId());
 
-            List<Pokemon> pokemons = pokemonRepository.getPokemonFromTeam(team.getId());
+            List<Pokemon> pokemons = team.getPokemons();
 
             newTeam.pokemons = new ArrayList<PokemonDTO>();
             for (Pokemon pkmn : pokemons) {
                 newTeam.pokemons.add(new PokemonDTO(pkmn));
             }
+
+            teams.add(newTeam);
         }
         return teams;
     }
 
+    @Transactional
     public TeamDTO createTeam(TeamCreateDTO dto) {
 
+        // 1️⃣ Récupérer le créateur
         User creator = userRepository.findById(dto.creatorId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
+        // 2️⃣ Créer la Team
         Team team = new Team();
         team.setName(dto.name);
         team.setCreator(creator);
         team.setCreateDate(Date.from(Instant.now()));
 
-        for (PokemonDTO poke : dto.pokemons) {
-            Pokemon newPoke = new Pokemon(new PokemonSlot(team.getId(), 1), team, poke.pokeId, poke.name, poke.abilityId, poke.itemId, poke.move1Id, poke.move2Id, poke.move3Id, poke.move4Id, poke.isShiny);
-            this.pokemonRepository.save(newPoke);
+        // 3️⃣ Persister la Team pour obtenir l'ID
+        Team savedTeam = teamRepository.save(team);
+
+        // 4️⃣ Ajouter les Pokémon avec clé composite (PokemonSlot)
+        for (int i = 0; i < dto.pokemons.size(); i++) {
+            PokemonDTO poke = dto.pokemons.get(i);
+
+            // teamId = savedTeam.getId(), slotNum = i + 1
+            PokemonSlot slot = new PokemonSlot(savedTeam.getId(), i);
+
+            Pokemon newPoke = new Pokemon(
+                    slot,
+                    savedTeam,       // entité attachée
+                    poke.pokeId,
+                    poke.name,
+                    poke.abilityId,
+                    poke.itemId,
+                    poke.move1Id,
+                    poke.move2Id,
+                    poke.move3Id,
+                    poke.move4Id,
+                    poke.isShiny
+            );
+
+            // Ajout à la collection de la Team (cascade va gérer l'INSERT)
+            savedTeam.getPokemons().add(newPoke);
         }
 
-        TeamDTO created = new TeamDTO(teamRepository.save(team));
+        // 5️⃣ Aucun save supplémentaire nécessaire ! 
+        // Hibernate flush automatiquement à la fin de la transaction grâce à @Transactional
 
-        return created;
+        return new TeamDTO(savedTeam);
     }
 }

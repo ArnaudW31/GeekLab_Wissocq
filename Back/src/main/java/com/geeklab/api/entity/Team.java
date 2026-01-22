@@ -1,7 +1,10 @@
 package com.geeklab.api.entity;
 
 import jakarta.persistence.*;
+
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "team")
@@ -21,6 +24,9 @@ public class Team {
     @Column
     private Date createDate;
 
+    @OneToMany(mappedBy = "team", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Pokemon> pokemons = new ArrayList<>();
+
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
@@ -32,6 +38,9 @@ public class Team {
 
     public Date getCreateDate() { return createDate; }
     public void setCreateDate(Date createDate) { this.createDate = createDate; }
+
+    public List<Pokemon> getPokemons() { return this.pokemons;}
+    public void setPokemons(List<Pokemon> pokemons) { this.pokemons = pokemons; }
 
     @Override
     public String toString() {
