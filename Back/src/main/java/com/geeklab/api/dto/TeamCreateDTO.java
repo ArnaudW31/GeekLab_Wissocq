@@ -11,4 +11,10 @@ public class TeamCreateDTO {
         this.name = "";
         this.creatorId = (long) 0;
     }
+
+    public TeamCreateDTO(String name, Long creatorId, List<PokemonDTO> pokemons){
+        this.name = name;
+        this.creatorId = creatorId;
+        this.pokemons = pokemons;
+    }
 }

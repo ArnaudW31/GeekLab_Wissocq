@@ -4,6 +4,7 @@ import HomeView from '@/views/HomeView.vue'
 import AuthView from '@/views/AuthView.vue'
 import TeamView from '@/views/TeamView.vue'
 import SignInView from '@/views/SignInView.vue'
+import MentionsLegalesView from '@/views/MentionsLegalesView.vue'
 
 const routes = [
   {
@@ -25,6 +26,11 @@ const routes = [
     path: '/signin',
     name: 'signin',
     component: SignInView,
+  },
+  {
+    path: '/mentions',
+    name: 'mentions',
+    component: MentionsLegalesView,
   },
 ]
 

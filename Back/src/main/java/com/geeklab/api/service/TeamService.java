@@ -75,47 +75,36 @@ public class TeamService {
     @Transactional
     public TeamDTO createTeam(TeamCreateDTO dto) {
 
-        // 1️⃣ Récupérer le créateur
         User creator = userRepository.findById(dto.creatorId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        // 2️⃣ Créer la Team
         Team team = new Team();
         team.setName(dto.name);
         team.setCreator(creator);
         team.setCreateDate(Date.from(Instant.now()));
 
-        // 3️⃣ Persister la Team pour obtenir l'ID
         Team savedTeam = teamRepository.save(team);
 
-        // 4️⃣ Ajouter les Pokémon avec clé composite (PokemonSlot)
         for (int i = 0; i < dto.pokemons.size(); i++) {
             PokemonDTO poke = dto.pokemons.get(i);
 
-            // teamId = savedTeam.getId(), slotNum = i + 1
             PokemonSlot slot = new PokemonSlot(savedTeam.getId(), i);
 
             Pokemon newPoke = new Pokemon(
-                    slot,
-                    savedTeam,       // entité attachée
-                    poke.pokeId,
-                    poke.name,
-                    poke.abilityId,
-                    poke.itemId,
-                    poke.move1Id,
-                    poke.move2Id,
-                    poke.move3Id,
-                    poke.move4Id,
-                    poke.isShiny
+                slot,
+                savedTeam,
+                poke.pokeId,
+                poke.name,
+                poke.abilityId,
+                poke.itemId,
+                poke.move1Id,
+                poke.move2Id,
+                poke.move3Id,
+                poke.move4Id,
+                poke.isShiny
             );
-
-            // Ajout à la collection de la Team (cascade va gérer l'INSERT)
             savedTeam.getPokemons().add(newPoke);
         }
-
-        // 5️⃣ Aucun save supplémentaire nécessaire ! 
-        // Hibernate flush automatiquement à la fin de la transaction grâce à @Transactional
-
         return new TeamDTO(savedTeam);
     }
 }

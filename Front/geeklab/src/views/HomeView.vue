@@ -5,13 +5,8 @@
 
     <v-row>
       <v-col
-        v-for="(team, index) in teams"
-        :key="index"
-        cols="12"
-        md="6"
-      >
+        v-for="(team, index) in teams" :key="index" cols="12" md="6">
         <v-card class="pa-4 mb-4 elevation-4">
-          <!-- Nom et créateur -->
           <div class="d-flex justify-space-between align-center mb-2">
             <h2>{{ team.name }}</h2>
             <span class="grey--text text--darken-1">Créateur : {{ team.creatorName }}</span>
